@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./index.css";
+import API, { BASE_URL } from "../src/api";
 
 function ChatPage({ username, onLogout, api }) {
   const SERVER = api;
@@ -39,14 +40,14 @@ function ChatPage({ username, onLogout, api }) {
   
   
   const fetchMessages = async () => {
-    const res = await axios.get(`${SERVER}/chat`);
+    const res = await API.get(`/chat`);
     setMessages(res.data);
   };
 
   const sendMessage = async () => {
     if (!username || !text) return alert("Enter username & message");
 
-    await axios.post(`${SERVER}/chat`, {
+    await API.post(`/chat`, {
       user: username,
       text
     });
