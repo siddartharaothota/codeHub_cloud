@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import "./index.css";
 import JSZip from "jszip";
 
-
 function FileManager({ username, onLogout, api }) {
     const SERVER = api;
     const [files, setFiles] = useState([]);

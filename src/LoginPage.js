@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import API from "../src/api";
-
 import LiquidEther from './effects/LiquidEther';
+import loadingGif from "../src/assets/loading1.gif";
 
 // const SERVER = "http://192.168.127.4:8000";
 
 function LoginPage({ onLoginSuccess }) {
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,12 +20,19 @@ function LoginPage({ onLoginSuccess }) {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
+    setLoading(true);
 
-    if (!username || !password)
-      return setError("Fill all fields");
+    if (!username || !password) {
+      setError("Fill all fields");
+      setLoading(false);
+      return;
+    }
 
-    if (!serverIP)
-      return setError("Server IP not found");
+    // if (!serverIP) {
+    //   setError("Server IP not found");
+    //   setLoading(false);
+    //   return;
+    // }
 
     try {
       const res = await API.get("/users");
@@ -49,6 +57,8 @@ function LoginPage({ onLoginSuccess }) {
     } catch (err) {
       console.error(err);
       setError("Server not connected");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,21 +116,25 @@ function LoginPage({ onLoginSuccess }) {
         </div>
 
         <div className="server-row">
-          <span>Server IP:</span>
+          <span>Version:</span>
           <span className="server-value">
-            {serverIP || "Connecting..."}
+            0.2.7.SR
           </span>
         </div>
       </div>
 
 
-
-
-
-
       {/* Login Content */}
       <div className="loginPage">
         <div className="loginCard">
+
+          {loading && (
+            <div className="loadingIcon">
+              <img src={loadingGif} alt="Loading..." className="loadingIcon" />
+            </div>
+          )}
+
+
           <h2>CodeHub Login</h2>
 
           {error && <p className="errorMsg">{error}</p>}
@@ -146,6 +160,7 @@ function LoginPage({ onLoginSuccess }) {
 
             <button type="submit">Login</button>
           </form>
+
         </div>
       </div>
 
